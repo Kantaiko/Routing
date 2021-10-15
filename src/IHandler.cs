@@ -1,7 +1,6 @@
-namespace Kantaiko.Routing
+namespace Kantaiko.Routing;
+
+public interface IHandler<in TInput, out TOutput>
 {
-    public interface IHandler<in TInput, out TOutput>
-    {
-        TOutput Handle(TInput input);
-    }
+    TOutput Handle(TInput input);
 }

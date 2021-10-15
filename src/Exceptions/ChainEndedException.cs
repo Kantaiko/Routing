@@ -1,9 +1,6 @@
-using System;
+namespace Kantaiko.Routing.Exceptions;
 
-namespace Kantaiko.Routing.Exceptions
+public class ChainEndedException : Exception
 {
-    public class ChainEndedException : Exception
-    {
-        public ChainEndedException() : base("No handlers left") { }
-    }
+    public ChainEndedException() : base("No handlers left") { }
 }

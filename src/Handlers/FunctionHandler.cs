@@ -1,16 +1,15 @@
-namespace Kantaiko.Routing.Handlers
+namespace Kantaiko.Routing.Handlers;
+
+public class FunctionHandler<TInput, TOutput> : IHandler<TInput, TOutput>
 {
-    public class FunctionHandler<TInput, TOutput> : IHandler<TInput, TOutput>
+    public delegate TOutput FunctionDelegate(TInput input);
+
+    private readonly FunctionDelegate _functionDelegate;
+
+    public FunctionHandler(FunctionDelegate functionDelegate)
     {
-        public delegate TOutput FunctionDelegate(TInput input);
-
-        private readonly FunctionDelegate _functionDelegate;
-
-        public FunctionHandler(FunctionDelegate functionDelegate)
-        {
-            _functionDelegate = functionDelegate;
-        }
-
-        public TOutput Handle(TInput input) => _functionDelegate(input);
+        _functionDelegate = functionDelegate;
     }
+
+    public TOutput Handle(TInput input) => _functionDelegate(input);
 }
