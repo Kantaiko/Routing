@@ -1,3 +1,4 @@
+using Kantaiko.Routing.Abstractions;
 using Kantaiko.Routing.Handlers;
 
 namespace Kantaiko.Routing;
@@ -28,5 +29,23 @@ public static class Handler
         IEnumerable<IHandler<TInput, TOutput>> handlers)
     {
         return new ChainHandler<TInput, TOutput>(handlers);
+    }
+
+    public static IHandler<TInput, TOutput> Transient<TInput, TOutput>(Type handlerType,
+        IHandlerFactory? handlerFactory = null)
+    {
+        return new TransientHandler<TInput, TOutput>(handlerType, handlerFactory);
+    }
+
+    public static IHandler<TInput, TOutput> Transient<TInput, TOutput, THandler>(IHandlerFactory? handlerFactory = null)
+        where THandler : IHandler<TInput, TOutput>
+    {
+        return new TransientHandler<TInput, TOutput>(typeof(THandler), handlerFactory);
+    }
+
+    public static IHandler<TInput, TOutput> Wrap<TInput, TOutput>(this IHandler<TInput, TOutput> originalHandler,
+        WrappedHandler<TInput, TOutput>.WrapperFunction wrapperFunction)
+    {
+        return new WrappedHandler<TInput, TOutput>(originalHandler, wrapperFunction);
     }
 }
