@@ -102,4 +102,8 @@ public static class Handler
 
         return new SequentialAsyncHandler<TInput>(handlers);
     }
+
+    public static IHandler<TInput, Unit> Empty<TInput>() => EmptyHandler<TInput>.Instance;
+
+    public static IHandler<TInput, Task<Unit>> EmptyAsync<TInput>() => EmptyAsyncHandler<TInput>.Instance;
 }
