@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.4.0"></a>
+## [0.4.0](https://www.github.com/Kantaiko/Routing/releases/tag/v0.4.0) (2021-12-16)
+
+### Features
+
+* Add empty handlers ([c825120](https://www.github.com/Kantaiko/Routing/commit/c825120fd8ec440bbeebb8a88aa6efb1abae2c6b))
+
 <a name="0.3.0"></a>
 ## [0.3.0](https://www.github.com/Kantaiko/Routing/releases/tag/v0.3.0) (2021-12-16)
 
