@@ -1,4 +1,14 @@
-# Change Log\n\nAll notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.\n
+# Change Log
+
+All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
+
+<a name="0.3.0"></a>
+## [0.3.0](https://www.github.com/Kantaiko/Routing/releases/tag/v0.3.0) (2021-12-16)
+
+### Features
+
+* Add parallel, sequential handlers and handler auto registration ([bee89c1](https://www.github.com/Kantaiko/Routing/commit/bee89c1f968fc7d78f1d6d2e74a4d1d3200733e5))
+
 <a name="0.2.0"></a>
 ## [0.2.0](https://www.github.com/Kantaiko/Routing/releases/tag/v0.2.0) (2021-10-26)
 
