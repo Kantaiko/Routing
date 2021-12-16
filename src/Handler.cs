@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Kantaiko.Routing.Abstractions;
 using Kantaiko.Routing.Handlers;
 
@@ -10,31 +11,52 @@ public static class Handler
         IHandler<TInput, TOutput> firstHandler,
         IHandler<TInput, TOutput> secondHandler)
     {
+        ArgumentNullException.ThrowIfNull(splitPredicate);
+        ArgumentNullException.ThrowIfNull(firstHandler);
+        ArgumentNullException.ThrowIfNull(secondHandler);
+
         return new SplitHandler<TInput, TOutput>(splitPredicate, firstHandler, secondHandler);
     }
 
     public static IHandler<TInput, TOutput> Function<TInput, TOutput>(
         FunctionHandler<TInput, TOutput>.FunctionDelegate functionDelegate)
     {
+        ArgumentNullException.ThrowIfNull(functionDelegate);
+
         return new FunctionHandler<TInput, TOutput>(functionDelegate);
     }
 
     public static IChainedHandler<TInput, TOutput> Function<TInput, TOutput>(
         ChainedFunctionHandler<TInput, TOutput>.FunctionDelegate functionDelegate)
     {
+        ArgumentNullException.ThrowIfNull(functionDelegate);
+
         return new ChainedFunctionHandler<TInput, TOutput>(functionDelegate);
     }
 
     public static IHandler<TInput, TOutput> Chain<TInput, TOutput>(
         IEnumerable<IHandler<TInput, TOutput>> handlers)
     {
+        ArgumentNullException.ThrowIfNull(handlers);
+
         return new ChainHandler<TInput, TOutput>(handlers);
     }
 
     public static IHandler<TInput, TOutput> Transient<TInput, TOutput>(Type handlerType,
         IHandlerFactory? handlerFactory = null)
     {
+        ArgumentNullException.ThrowIfNull(handlerType);
+
         return new TransientHandler<TInput, TOutput>(handlerType, handlerFactory);
+    }
+
+    public static IReadOnlyList<IHandler<TInput, TOutput>> TransientRange<TInput, TOutput>(
+        IEnumerable<Type> handlerTypes,
+        IHandlerFactory? handlerFactory = null)
+    {
+        ArgumentNullException.ThrowIfNull(handlerTypes);
+
+        return handlerTypes.Select(x => new TransientHandler<TInput, TOutput>(x, handlerFactory)).ToImmutableArray();
     }
 
     public static IHandler<TInput, TOutput> Transient<TInput, TOutput, THandler>(IHandlerFactory? handlerFactory = null)
@@ -46,6 +68,38 @@ public static class Handler
     public static IHandler<TInput, TOutput> Wrap<TInput, TOutput>(this IHandler<TInput, TOutput> originalHandler,
         WrappedHandler<TInput, TOutput>.WrapperFunction wrapperFunction)
     {
+        ArgumentNullException.ThrowIfNull(originalHandler);
+        ArgumentNullException.ThrowIfNull(wrapperFunction);
+
         return new WrappedHandler<TInput, TOutput>(originalHandler, wrapperFunction);
+    }
+
+    public static IHandler<TInput, Unit> Parallel<TInput>(IEnumerable<IHandler<TInput, Unit>> handlers)
+    {
+        ArgumentNullException.ThrowIfNull(handlers);
+
+        return new ParallelHandler<TInput>(handlers);
+    }
+
+    public static IHandler<TInput, Task<Unit>> ParallelAsync<TInput>(IEnumerable<IHandler<TInput, Task<Unit>>> handlers)
+    {
+        ArgumentNullException.ThrowIfNull(handlers);
+
+        return new ParallelAsyncHandler<TInput>(handlers);
+    }
+
+    public static IHandler<TInput, Unit> Sequential<TInput>(IEnumerable<IHandler<TInput, Unit>> handlers)
+    {
+        ArgumentNullException.ThrowIfNull(handlers);
+
+        return new SequentialHandler<TInput>(handlers);
+    }
+
+    public static IHandler<TInput, Task<Unit>> SequentialAsync<TInput>(
+        IEnumerable<IHandler<TInput, Task<Unit>>> handlers)
+    {
+        ArgumentNullException.ThrowIfNull(handlers);
+
+        return new SequentialAsyncHandler<TInput>(handlers);
     }
 }

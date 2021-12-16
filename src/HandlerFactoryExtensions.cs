@@ -6,17 +6,16 @@ namespace Kantaiko.Routing;
 public static class HandlerFactoryExtensions
 {
     public static IHandler<TInput, TOutput> CreateHandler<TInput, TOutput>(this IHandlerFactory handlerFactory,
-        Type handlerType, IServiceProvider serviceProvider)
+        Type handlerType, object? input = null, IServiceProvider? fallbackServiceProvider = null)
     {
-        return (IHandler<TInput, TOutput>) handlerFactory.CreateHandler(handlerType, serviceProvider);
-    }
+        ArgumentNullException.ThrowIfNull(handlerFactory);
+        ArgumentNullException.ThrowIfNull(handlerFactory);
 
-    public static IHandler<TInput, TOutput> CreateHandler<TInput, TOutput>(this IHandlerFactory handlerFactory,
-        Type handlerType, object? input)
-    {
+        fallbackServiceProvider ??= DefaultServiceProvider.Instance;
+
         var serviceProvider = input is IHasServiceProvider hasServiceProvider
             ? hasServiceProvider.ServiceProvider
-            : DefaultServiceProvider.Instance;
+            : fallbackServiceProvider;
 
         return (IHandler<TInput, TOutput>) handlerFactory.CreateHandler(handlerType, serviceProvider);
     }
