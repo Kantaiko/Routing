@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.5.0"></a>
+## [0.5.0](https://www.github.com/Kantaiko/Routing/releases/tag/v0.5.0) (2021-12-26)
+
+### Features
+
+* Add built-in strategies for event and request handlers ([9a133b7](https://www.github.com/Kantaiko/Routing/commit/9a133b7e74fb845c8867149f9a042630020073e0))
+
 <a name="0.4.0"></a>
 ## [0.4.0](https://www.github.com/Kantaiko/Routing/releases/tag/v0.4.0) (2021-12-16)
 
