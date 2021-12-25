@@ -26,12 +26,37 @@ public static class Handler
         return new FunctionHandler<TInput, TOutput>(functionDelegate);
     }
 
+    public static IHandler<TInput, TOutput> Function<TTargetInput, TInput, TOutput>(
+        FunctionHandler<TTargetInput, TOutput>.FunctionDelegate functionDelegate) where TTargetInput : TInput
+    {
+        ArgumentNullException.ThrowIfNull(functionDelegate);
+
+        return new FunctionHandler<TInput, TOutput>(input => functionDelegate((TTargetInput) input!));
+    }
+
     public static IChainedHandler<TInput, TOutput> Function<TInput, TOutput>(
         ChainedFunctionHandler<TInput, TOutput>.FunctionDelegate functionDelegate)
     {
         ArgumentNullException.ThrowIfNull(functionDelegate);
 
         return new ChainedFunctionHandler<TInput, TOutput>(functionDelegate);
+    }
+
+    public static IChainedHandler<TInput, TOutput> Function<TTargetInput, TInput, TOutput>(
+        ChainedFunctionHandler<TTargetInput, TOutput>.FunctionDelegate functionDelegate) where TTargetInput : TInput
+    {
+        ArgumentNullException.ThrowIfNull(functionDelegate);
+
+        return new ChainedFunctionHandler<TInput, TOutput>((input, next) =>
+            functionDelegate((TTargetInput) input!, x => next(x)));
+    }
+
+    public static IHandler<TInput, TOutput> Router<TInput, TOutput>(
+        IReadOnlyDictionary<Type, IHandler<TInput, TOutput>> routes)
+    {
+        ArgumentNullException.ThrowIfNull(routes);
+
+        return new RouterHandler<TInput, TOutput>(routes);
     }
 
     public static IHandler<TInput, TOutput> Chain<TInput, TOutput>(
@@ -72,6 +97,13 @@ public static class Handler
         ArgumentNullException.ThrowIfNull(wrapperFunction);
 
         return new WrappedHandler<TInput, TOutput>(originalHandler, wrapperFunction);
+    }
+
+    public static IHandler<TInput, TOutput> CheckNull<TInput, TOutput>(this IHandler<TInput, TOutput> handler)
+    {
+        ArgumentNullException.ThrowIfNull(handler);
+
+        return new NullCheckHandler<TInput, TOutput>(handler);
     }
 
     public static IHandler<TInput, Unit> Parallel<TInput>(IEnumerable<IHandler<TInput, Unit>> handlers)

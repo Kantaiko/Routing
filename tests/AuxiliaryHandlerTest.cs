@@ -24,4 +24,14 @@ public class AuxiliaryHandlerTest
 
         Assert.Equal(36, wrappedHandler.Handle(12));
     }
+
+    [Fact]
+    public void ShouldPerformNullCheck()
+    {
+        var uncheckedHandler = Handler.Function<string, string>(x => x.ToLower());
+        var checkedHandler = uncheckedHandler.CheckNull();
+
+        Assert.Throws<NullReferenceException>(() => uncheckedHandler.Handle(null!));
+        Assert.Throws<ArgumentNullException>(() => checkedHandler.Handle(null!));
+    }
 }

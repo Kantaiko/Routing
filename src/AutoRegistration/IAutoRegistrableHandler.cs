@@ -1,3 +1,3 @@
 namespace Kantaiko.Routing.AutoRegistration;
 
-public interface IAutoRegistrableHandler { }
+public interface IAutoRegistrableHandler<in TInput> { }
