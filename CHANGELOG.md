@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.5.1"></a>
+## [0.5.1](https://www.github.com/Kantaiko/Routing/releases/tag/v0.5.1) (2021-12-27)
+
+### Bug Fixes
+
+* Reorganize auto registration service and fix some bugs ([a2baee4](https://www.github.com/Kantaiko/Routing/commit/a2baee442d42fce9b76de7f25e563fac82dc2d52))
+
 <a name="0.5.0"></a>
 ## [0.5.0](https://www.github.com/Kantaiko/Routing/releases/tag/v0.5.0) (2021-12-26)
 
