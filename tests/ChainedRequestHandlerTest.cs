@@ -12,11 +12,10 @@ public class ChainedRequestHandlerTest
     {
         var types = Assembly.GetExecutingAssembly().GetTypes();
 
-        var lastHandler = Handler.Function<IRequestContext<IRequestBase>, Task<object>>((context, _) =>
-            Task.FromResult<object>(((ITestRequestBase) context.Request).A));
+        var lastHandler = Handler.Function<IRequestContext<ITestRequestBase>, Task<object>>((context, _) =>
+            Task.FromResult<object>(context.Request.A));
 
-        var handler = RequestHandlerFactory.CreateChainedRequestHandler<ITestRequestBase>(types,
-            lastHandler: lastHandler);
+        var handler = RequestHandlerFactory.CreateChainedRequestHandler(types, lastHandler: lastHandler);
 
         var request = new TestRequestA(20);
         var response = await handler.HandleAsync<TestRequestA, int>(new RequestContext<TestRequestA>(request,
@@ -25,7 +24,7 @@ public class ChainedRequestHandlerTest
         Assert.Equal(42, response);
     }
 
-    private interface ITestRequestBase : IRequestBase
+    private interface ITestRequestBase
     {
         public int A { get; }
     }

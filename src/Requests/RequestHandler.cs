@@ -3,7 +3,7 @@ using Kantaiko.Routing.AutoRegistration;
 namespace Kantaiko.Routing.Requests;
 
 public abstract class RequestHandler<TRequest, TResponse> :
-    IHandler<IRequestContext<IRequestBase>, Task<object?>>,
+    IHandler<IRequestContext<object>, Task<object?>>,
     IAutoRegistrableHandler<TRequest>
 {
     protected IRequestContext<TRequest> Context { get; private set; } = null!;
@@ -14,8 +14,8 @@ public abstract class RequestHandler<TRequest, TResponse> :
 
     protected abstract Task<TResponse> HandleAsync(IRequestContext<TRequest> context);
 
-    async Task<object?> IHandler<IRequestContext<IRequestBase>, Task<object?>>.Handle(
-        IRequestContext<IRequestBase> input)
+    async Task<object?> IHandler<IRequestContext<object>, Task<object?>>.Handle(
+        IRequestContext<object> input)
     {
         Context = (IRequestContext<TRequest>) input;
 

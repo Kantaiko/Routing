@@ -1,5 +1,6 @@
 using Kantaiko.Routing.Abstractions;
 using Kantaiko.Routing.AutoRegistration.Exceptions;
+using Kantaiko.Routing.Handlers;
 using Kantaiko.Routing.Requests;
 
 namespace Kantaiko.Routing.AutoRegistration;
@@ -7,7 +8,7 @@ namespace Kantaiko.Routing.AutoRegistration;
 public static class RequestHandlerFactory
 {
     public static IHandler<IRequestContext<TRequestBase>, Task<object>> CreateSingleRequestHandler<TRequestBase>(
-        IEnumerable<Type> types, IHandlerFactory? handlerFactory = null) where TRequestBase : IRequestBase
+        IEnumerable<Type> types, IHandlerFactory? handlerFactory = null) where TRequestBase : class
     {
         return CreateRequestHandler<TRequestBase>((handlers, inputType) =>
         {
@@ -27,21 +28,31 @@ public static class RequestHandlerFactory
 
     public static IHandler<IRequestContext<TRequestBase>, Task<object>> CreateChainedRequestHandler<TRequestBase>(
         IEnumerable<Type> types, IHandlerFactory? handlerFactory = null,
-        IHandler<IRequestContext<IRequestBase>, Task<object>>? lastHandler = null) where TRequestBase : IRequestBase
+        IHandler<IRequestContext<TRequestBase>, Task<object>>? lastHandler = null)
+        where TRequestBase : class
     {
-        return CreateRequestHandler<TRequestBase>(
-            (handlers, _) => Handler.Chain(lastHandler is not null ? handlers.Append(lastHandler) : handlers),
-            types, handlerFactory);
+        return CreateRequestHandler<TRequestBase>((handlers, _) =>
+        {
+            if (lastHandler is null)
+            {
+                return Handler.Chain(handlers);
+            }
+
+            var handler = new CastHandler<IRequestContext<TRequestBase>,
+                IRequestContext<object>, Task<object>>(lastHandler);
+
+            return Handler.Chain(handlers.Append(handler));
+        }, types, handlerFactory);
     }
 
     private static IHandler<IRequestContext<TRequestBase>, Task<object>> CreateRequestHandler<TRequestBase>(
         Func<
-            IReadOnlyList<IHandler<IRequestContext<IRequestBase>, Task<object>>>,
+            IReadOnlyList<IHandler<IRequestContext<object>, Task<object>>>,
             Type,
-            IHandler<IRequestContext<IRequestBase>, Task<object>>
+            IHandler<IRequestContext<object>, Task<object>>
         > createHandler,
         IEnumerable<Type> types,
-        IHandlerFactory? handlerFactory = null) where TRequestBase : IRequestBase
+        IHandlerFactory? handlerFactory = null)
     {
         ArgumentNullException.ThrowIfNull(types);
 
@@ -56,7 +67,7 @@ public static class RequestHandlerFactory
         {
             var keyType = typeof(RequestContext<>).MakeGenericType(inputType);
 
-            var handlers = AutoRegistrationUtils.CreateTransientHandlers<IRequestContext<IRequestBase>, Task<object>>(
+            var handlers = AutoRegistrationUtils.CreateTransientHandlers<IRequestContext<object>, Task<object>>(
                 inputType, typeCollection, handlerFactory);
 
             routes[keyType] = (IHandler<IRequestContext<TRequestBase>, Task<object>>)

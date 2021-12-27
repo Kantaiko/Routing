@@ -3,9 +3,8 @@ using Kantaiko.Routing.AutoRegistration;
 namespace Kantaiko.Routing.Events;
 
 public abstract class ChainedEventHandler<TEvent> :
-    IChainedHandler<IEventContext<IEvent>, Task<Unit>>,
+    IChainedHandler<IEventContext<object>, Task<Unit>>,
     IAutoRegistrableHandler<TEvent>
-    where TEvent : IEvent
 {
     protected IEventContext<TEvent> Context { get; private set; } = null!;
 
@@ -17,13 +16,13 @@ public abstract class ChainedEventHandler<TEvent> :
 
     protected abstract Task<Unit> HandleAsync(IEventContext<TEvent> context, NextHandler next);
 
-    async Task<Unit> IChainedHandler<IEventContext<IEvent>, Task<Unit>>.Handle(IEventContext<IEvent> input,
-        Func<IEventContext<IEvent>, Task<Unit>> next)
+    async Task<Unit> IChainedHandler<IEventContext<object>, Task<Unit>>.Handle(IEventContext<object> input,
+        Func<IEventContext<object>, Task<Unit>> next)
     {
         Context = (IEventContext<TEvent>) input;
 
         await BeforeHandleAsync(Context);
-        await HandleAsync(Context, x => next((IEventContext<IEvent>) (x ?? Context)));
+        await HandleAsync(Context, x => next((IEventContext<object>) (x ?? Context)));
         await AfterHandleAsync(Context);
 
         return default;

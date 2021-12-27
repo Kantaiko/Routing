@@ -90,6 +90,14 @@ public static class Handler
         return new TransientHandler<TInput, TOutput>(typeof(THandler), handlerFactory);
     }
 
+    public static IHandler<TInput, TOutput> Cast<TTargetInput, TInput, TOutput>(IHandler<TTargetInput, TOutput> handler)
+        where TTargetInput : TInput
+    {
+        ArgumentNullException.ThrowIfNull(handler);
+
+        return new CastHandler<TTargetInput, TInput, TOutput>(handler);
+    }
+
     public static IHandler<TInput, TOutput> Wrap<TInput, TOutput>(this IHandler<TInput, TOutput> originalHandler,
         WrappedHandler<TInput, TOutput>.WrapperFunction wrapperFunction)
     {

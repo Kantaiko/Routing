@@ -3,9 +3,8 @@ using Kantaiko.Routing.AutoRegistration;
 namespace Kantaiko.Routing.Events;
 
 public abstract class EventHandler<TEvent> :
-    IHandler<IEventContext<IEvent>, Task<Unit>>,
+    IHandler<IEventContext<object>, Task<Unit>>,
     IAutoRegistrableHandler<TEvent>
-    where TEvent : IEvent
 {
     protected IEventContext<TEvent> Context { get; private set; } = null!;
 
@@ -15,7 +14,7 @@ public abstract class EventHandler<TEvent> :
 
     protected abstract Task<Unit> HandleAsync(IEventContext<TEvent> context);
 
-    async Task<Unit> IHandler<IEventContext<IEvent>, Task<Unit>>.Handle(IEventContext<IEvent> input)
+    async Task<Unit> IHandler<IEventContext<object>, Task<Unit>>.Handle(IEventContext<object> input)
     {
         Context = (IEventContext<TEvent>) input;
 

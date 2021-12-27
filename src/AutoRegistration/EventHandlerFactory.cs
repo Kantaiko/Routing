@@ -1,12 +1,13 @@
 using Kantaiko.Routing.Abstractions;
 using Kantaiko.Routing.Events;
+using Kantaiko.Routing.Handlers;
 
 namespace Kantaiko.Routing.AutoRegistration;
 
 public static class EventHandlerFactory
 {
     public static IHandler<IEventContext<TEventBase>, Task<Unit>> CreateParallelEventHandler<TEventBase>(
-        IEnumerable<Type> types, IHandlerFactory? handlerFactory = null) where TEventBase : IEvent
+        IEnumerable<Type> types, IHandlerFactory? handlerFactory = null) where TEventBase : class
     {
         ArgumentNullException.ThrowIfNull(types);
 
@@ -14,7 +15,7 @@ public static class EventHandlerFactory
     }
 
     public static IHandler<IEventContext<TEventBase>, Task<Unit>> CreateSequentialEventHandler<TEventBase>(
-        IEnumerable<Type> types, IHandlerFactory? handlerFactory = null) where TEventBase : IEvent
+        IEnumerable<Type> types, IHandlerFactory? handlerFactory = null) where TEventBase : class
     {
         ArgumentNullException.ThrowIfNull(types);
 
@@ -23,22 +24,33 @@ public static class EventHandlerFactory
 
     public static IHandler<IEventContext<TEventBase>, Task<Unit>> CreateChainedEventHandler<TEventBase>(
         IEnumerable<Type> types, IHandlerFactory? handlerFactory = null,
-        IHandler<IEventContext<IEvent>, Task<Unit>>? lastHandler = null) where TEventBase : IEvent
+        IHandler<IEventContext<TEventBase>, Task<Unit>>? lastHandler = null) where TEventBase : class
     {
         ArgumentNullException.ThrowIfNull(types);
 
         return CreateEventHandler<TEventBase>(
-            handlers => Handler.Chain(handlers.Append(lastHandler ?? Handler.EmptyAsync<IEventContext<IEvent>>())),
+            handlers =>
+            {
+                if (lastHandler is null)
+                {
+                    return Handler.Chain(handlers.Append(Handler.EmptyAsync<IEventContext<object>>()));
+                }
+
+                var handler = new CastHandler<IEventContext<TEventBase>,
+                    IEventContext<object>, Task<Unit>>(lastHandler);
+
+                return Handler.Chain(handlers.Append(handler));
+            },
             types, handlerFactory);
     }
 
     private static IHandler<IEventContext<TEventBase>, Task<Unit>> CreateEventHandler<TEventBase>(
         Func<
-            IEnumerable<IHandler<IEventContext<IEvent>, Task<Unit>>>,
-            IHandler<IEventContext<IEvent>, Task<Unit>>
+            IEnumerable<IHandler<IEventContext<object>, Task<Unit>>>,
+            IHandler<IEventContext<object>, Task<Unit>>
         > createHandler,
         IEnumerable<Type> types,
-        IHandlerFactory? handlerFactory = null) where TEventBase : IEvent
+        IHandlerFactory? handlerFactory = null)
     {
         var typeCollection = AutoRegistrationUtils.MaterializeCollection(types);
 
@@ -46,7 +58,7 @@ public static class EventHandlerFactory
 
         if (eventTypes.Length == 1)
         {
-            var handlers = AutoRegistrationUtils.CreateTransientHandlers<IEventContext<IEvent>, Task<Unit>>(
+            var handlers = AutoRegistrationUtils.CreateTransientHandlers<IEventContext<object>, Task<Unit>>(
                 eventTypes[0], typeCollection, handlerFactory);
 
             return (IHandler<IEventContext<TEventBase>, Task<Unit>>) createHandler(handlers);
@@ -58,7 +70,7 @@ public static class EventHandlerFactory
         {
             var keyType = typeof(EventContext<>).MakeGenericType(eventType);
 
-            var handlers = AutoRegistrationUtils.CreateTransientHandlers<IEventContext<IEvent>, Task<Unit>>(
+            var handlers = AutoRegistrationUtils.CreateTransientHandlers<IEventContext<object>, Task<Unit>>(
                 eventType, typeCollection, handlerFactory);
 
             routes[keyType] = (IHandler<IEventContext<TEventBase>, Task<Unit>>) createHandler(handlers);

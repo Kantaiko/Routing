@@ -48,11 +48,11 @@ public class RequestHandlerTest
         Assert.Throws<AmbiguousRequestHandlerException>(Action);
     }
 
-    private interface ITestRequestBaseA : IRequestBase { }
+    private interface ITestRequestBaseA { }
 
-    private interface ITestRequestBaseB : IRequestBase { }
+    private interface ITestRequestBaseB { }
 
-    private interface ITestRequestBaseC : IRequestBase { }
+    private interface ITestRequestBaseC { }
 
     private class TestRequestA : IRequest<int>, ITestRequestBaseA { }
 

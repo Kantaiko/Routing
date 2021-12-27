@@ -24,7 +24,7 @@ public class ChainedEventHandlerTest
         Assert.Equal(42, eventB.Count);
     }
 
-    private class EventBase : IEvent
+    private class EventBase
     {
         public int Count { get; set; }
     }

@@ -3,7 +3,7 @@ using Kantaiko.Routing.AutoRegistration;
 namespace Kantaiko.Routing.Requests;
 
 public abstract class ChainedRequestHandler<TRequest, TResponse> :
-    IChainedHandler<IRequestContext<IRequestBase>, Task<object?>>,
+    IChainedHandler<IRequestContext<object>, Task<object?>>,
     IAutoRegistrableHandler<TRequest>
     where TRequest : IRequest<TResponse>
 {
@@ -17,16 +17,16 @@ public abstract class ChainedRequestHandler<TRequest, TResponse> :
 
     protected abstract Task<TResponse> HandleAsync(IRequestContext<TRequest> context, NextHandler next);
 
-    async Task<object?> IChainedHandler<IRequestContext<IRequestBase>, Task<object?>>.Handle(
-        IRequestContext<IRequestBase> input,
-        Func<IRequestContext<IRequestBase>, Task<object?>> next)
+    async Task<object?> IChainedHandler<IRequestContext<object>, Task<object?>>.Handle(
+        IRequestContext<object> input,
+        Func<IRequestContext<object>, Task<object?>> next)
     {
         Context = (IRequestContext<TRequest>) input;
 
         await BeforeHandleAsync(Context);
 
         var response = await HandleAsync(Context,
-            async x => (TResponse) (await next((IRequestContext<IRequestBase>) (x ?? Context)))!);
+            async x => (TResponse) (await next((IRequestContext<object>) (x ?? Context)))!);
 
         return await AfterHandleAsync(Context, response);
     }

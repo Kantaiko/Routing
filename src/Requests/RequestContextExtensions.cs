@@ -3,7 +3,7 @@ namespace Kantaiko.Routing.Requests;
 public static class RequestContextExtensions
 {
     public static IRequestContext<TRequest> WithRequest<TRequest>(this IRequestContext<TRequest> context,
-        TRequest request) where TRequest : IRequestBase
+        TRequest request)
     {
         ArgumentNullException.ThrowIfNull(context);
 
@@ -11,7 +11,7 @@ public static class RequestContextExtensions
     }
 
     public static IRequestContext<TRequest> WithServiceProvider<TRequest>(this IRequestContext<TRequest> context,
-        IServiceProvider serviceProvider) where TRequest : IRequestBase
+        IServiceProvider serviceProvider)
     {
         ArgumentNullException.ThrowIfNull(context);
 
@@ -19,7 +19,7 @@ public static class RequestContextExtensions
     }
 
     public static IRequestContext<TRequest> WithCancellationToken<TRequest>(this IRequestContext<TRequest> context,
-        CancellationToken cancellationToken) where TRequest : IRequestBase
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(context);
 

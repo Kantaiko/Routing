@@ -3,7 +3,7 @@ namespace Kantaiko.Routing.Events;
 public static class EventContextExtensions
 {
     public static IEventContext<TEvent> WithEvent<TEvent>(this IEventContext<TEvent> context,
-        TEvent @event) where TEvent : IEvent
+        TEvent @event)
     {
         ArgumentNullException.ThrowIfNull(context);
 
@@ -11,7 +11,7 @@ public static class EventContextExtensions
     }
 
     public static IEventContext<TEvent> WithServiceProvider<TEvent>(this IEventContext<TEvent> context,
-        IServiceProvider serviceProvider) where TEvent : IEvent
+        IServiceProvider serviceProvider)
     {
         ArgumentNullException.ThrowIfNull(context);
 
@@ -19,7 +19,7 @@ public static class EventContextExtensions
     }
 
     public static IEventContext<TEvent> WithCancellationToken<TEvent>(this IEventContext<TEvent> context,
-        CancellationToken cancellationToken) where TEvent : IEvent
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(context);
 

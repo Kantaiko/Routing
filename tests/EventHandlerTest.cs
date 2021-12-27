@@ -36,7 +36,7 @@ public class EventHandlerTest
         Assert.Equal(24, eventA.Count);
     }
 
-    private class EventBase : IEvent
+    private class EventBase
     {
         public int Count { get; set; }
     }
