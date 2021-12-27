@@ -11,7 +11,7 @@ public class ChainedEventHandlerTest
     public async Task ShouldHandleEventUsingChainedEventHandler()
     {
         var types = Assembly.GetExecutingAssembly().GetTypes();
-        var handler = HandlerAutoRegistrationService.CreateChainedEventHandler<EventBase>(types);
+        var handler = EventHandlerFactory.CreateChainedEventHandler<EventBase>(types);
 
         var eventA = new EventA();
         await handler.Handle(new EventContext<EventA>(eventA, DefaultServiceProvider.Instance, CancellationToken.None));

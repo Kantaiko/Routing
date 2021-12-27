@@ -6,7 +6,7 @@ namespace Kantaiko.Routing.Tests;
 
 public class AutoRegistrationTest
 {
-    private abstract class TestChainHandler : IChainedHandler<int, int>, IAutoRegistrableHandler<int>
+    private abstract class TestChainHandler : IChainedHandler<int, int>, IAutoRegistrableHandler
     {
         public abstract int Handle(int input, Func<int, int> next);
     }
@@ -25,7 +25,7 @@ public class AutoRegistrationTest
     public void ShouldGetAssemblyTypes()
     {
         var types = Assembly.GetExecutingAssembly().GetTypes();
-        var handlers = HandlerAutoRegistrationService.GetTransientHandlers<int, int>(types);
+        var handlers = StaticHandlerFactory.CreateTransientHandlers<int, int>(types);
 
         var lastHandler = Handler.Function<int, int>(input => input);
         var handler = Handler.Chain(handlers.Append(lastHandler));

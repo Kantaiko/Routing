@@ -12,7 +12,7 @@ public class RequestHandlerTest
     public async Task ShouldHandleRequestUsingRequestHandler()
     {
         var types = Assembly.GetExecutingAssembly().GetTypes();
-        var handler = HandlerAutoRegistrationService.CreateRequestHandler<ITestRequestBaseA>(types);
+        var handler = RequestHandlerFactory.CreateSingleRequestHandler<ITestRequestBaseA>(types);
 
         var requestA = new TestRequestA();
 
@@ -29,7 +29,7 @@ public class RequestHandlerTest
 
         void Action()
         {
-            HandlerAutoRegistrationService.CreateRequestHandler<ITestRequestBaseB>(types);
+            RequestHandlerFactory.CreateSingleRequestHandler<ITestRequestBaseB>(types);
         }
 
         Assert.Throws<MissingRequestHandlerException>(Action);
@@ -42,7 +42,7 @@ public class RequestHandlerTest
 
         void Action()
         {
-            HandlerAutoRegistrationService.CreateRequestHandler<ITestRequestBaseC>(types);
+            RequestHandlerFactory.CreateSingleRequestHandler<ITestRequestBaseC>(types);
         }
 
         Assert.Throws<AmbiguousRequestHandlerException>(Action);

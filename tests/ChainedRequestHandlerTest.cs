@@ -15,7 +15,7 @@ public class ChainedRequestHandlerTest
         var lastHandler = Handler.Function<IRequestContext<IRequestBase>, Task<object>>((context, _) =>
             Task.FromResult<object>(((ITestRequestBase) context.Request).A));
 
-        var handler = HandlerAutoRegistrationService.CreateChainedRequestHandler<ITestRequestBase>(types,
+        var handler = RequestHandlerFactory.CreateChainedRequestHandler<ITestRequestBase>(types,
             lastHandler: lastHandler);
 
         var request = new TestRequestA(20);
