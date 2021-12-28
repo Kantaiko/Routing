@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.6.0"></a>
+## [0.6.0](https://www.github.com/Kantaiko/Routing/releases/tag/v0.6.0) (2021-12-28)
+
+### Features
+
+* Add context properties and context service resolution ([618daa2](https://www.github.com/Kantaiko/Routing/commit/618daa24c1ae62b63a37acd80d588c62c5fbbe2f))
+
 <a name="0.5.2"></a>
 ## [0.5.2](https://www.github.com/Kantaiko/Routing/releases/tag/v0.5.2) (2021-12-27)
 
