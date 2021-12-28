@@ -16,8 +16,7 @@ public class RequestHandlerTest
 
         var requestA = new TestRequestA();
 
-        var result = await handler.HandleAsync<TestRequestA, int>(new RequestContext<TestRequestA>(requestA,
-            DefaultServiceProvider.Instance, CancellationToken.None));
+        var result = await handler.HandleAsync<TestRequestA, int>(new RequestContext<TestRequestA>(requestA));
 
         Assert.Equal(42, result);
     }

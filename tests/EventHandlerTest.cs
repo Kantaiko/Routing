@@ -14,12 +14,12 @@ public class EventHandlerTest
         var handler = EventHandlerFactory.CreateSequentialEventHandler<EventBase>(types);
 
         var eventA = new EventA();
-        await handler.Handle(new EventContext<EventA>(eventA, DefaultServiceProvider.Instance, CancellationToken.None));
+        await handler.Handle(new EventContext<EventA>(eventA));
 
         Assert.Equal(24, eventA.Count);
 
         var eventB = new EventB();
-        await handler.Handle(new EventContext<EventB>(eventB, DefaultServiceProvider.Instance, CancellationToken.None));
+        await handler.Handle(new EventContext<EventB>(eventB));
 
         Assert.Equal(42, eventB.Count);
     }
@@ -31,7 +31,7 @@ public class EventHandlerTest
         var handler = EventHandlerFactory.CreateSequentialEventHandler<EventA>(types);
 
         var eventA = new EventA();
-        await handler.Handle(new EventContext<EventA>(eventA, DefaultServiceProvider.Instance, CancellationToken.None));
+        await handler.Handle(new EventContext<EventA>(eventA));
 
         Assert.Equal(24, eventA.Count);
     }

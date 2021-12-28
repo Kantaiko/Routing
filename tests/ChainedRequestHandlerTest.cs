@@ -18,8 +18,7 @@ public class ChainedRequestHandlerTest
         var handler = RequestHandlerFactory.CreateChainedRequestHandler(types, lastHandler: lastHandler);
 
         var request = new TestRequestA(20);
-        var response = await handler.HandleAsync<TestRequestA, int>(new RequestContext<TestRequestA>(request,
-            DefaultServiceProvider.Instance, CancellationToken.None));
+        var response = await handler.HandleAsync<TestRequestA, int>(new RequestContext<TestRequestA>(request));
 
         Assert.Equal(42, response);
     }
