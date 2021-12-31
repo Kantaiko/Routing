@@ -13,9 +13,9 @@ public abstract class ChainedRequestHandler<TRequest, TResponse> :
     protected IServiceProvider ServiceProvider => Context.ServiceProvider;
     protected CancellationToken CancellationToken => Context.CancellationToken;
 
-    protected delegate Task<TResponse> NextHandler(IRequestContext<TRequest>? context = default);
+    protected delegate Task<TResponse> NextAction(IRequestContext<TRequest>? context = default);
 
-    protected abstract Task<TResponse> HandleAsync(IRequestContext<TRequest> context, NextHandler next);
+    protected abstract Task<TResponse> HandleAsync(IRequestContext<TRequest> context, NextAction next);
 
     async Task<object?> IChainedHandler<IRequestContext<object>, Task<object?>>.Handle(
         IRequestContext<object> input,

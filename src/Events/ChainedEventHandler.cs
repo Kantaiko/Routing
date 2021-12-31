@@ -12,9 +12,9 @@ public abstract class ChainedEventHandler<TEvent> :
     protected IServiceProvider ServiceProvider => Context.ServiceProvider;
     protected CancellationToken CancellationToken => Context.CancellationToken;
 
-    protected delegate Task<Unit> NextHandler(IEventContext<TEvent>? context = default);
+    protected delegate Task<Unit> NextAction(IEventContext<TEvent>? context = default);
 
-    protected abstract Task<Unit> HandleAsync(IEventContext<TEvent> context, NextHandler next);
+    protected abstract Task<Unit> HandleAsync(IEventContext<TEvent> context, NextAction next);
 
     async Task<Unit> IChainedHandler<IEventContext<object>, Task<Unit>>.Handle(IEventContext<object> input,
         Func<IEventContext<object>, Task<Unit>> next)

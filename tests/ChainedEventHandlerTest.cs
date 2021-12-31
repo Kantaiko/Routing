@@ -35,7 +35,7 @@ public class ChainedEventHandlerTest
 
     private class EventHandlerA : ChainedEventHandler<EventA>
     {
-        protected override Task<Unit> HandleAsync(IEventContext<EventA> context, NextHandler next)
+        protected override Task<Unit> HandleAsync(IEventContext<EventA> context, NextAction next)
         {
             Event.Count += 23;
             return next();
@@ -44,7 +44,7 @@ public class ChainedEventHandlerTest
 
     private class EventHandlerB : ChainedEventHandler<EventB>
     {
-        protected override Task<Unit> HandleAsync(IEventContext<EventB> context, NextHandler next)
+        protected override Task<Unit> HandleAsync(IEventContext<EventB> context, NextAction next)
         {
             Event.Count += 41;
             return next();
@@ -53,7 +53,7 @@ public class ChainedEventHandlerTest
 
     private class GenericEventHandler : ChainedEventHandler<EventBase>
     {
-        protected override Task<Unit> HandleAsync(IEventContext<EventBase> context, NextHandler next)
+        protected override Task<Unit> HandleAsync(IEventContext<EventBase> context, NextAction next)
         {
             Event.Count++;
             return next();

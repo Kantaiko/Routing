@@ -34,7 +34,7 @@ public class ChainedRequestHandlerTest
 
     private class TestRequestHandler1 : ChainedRequestHandler<TestRequestA, int>
     {
-        protected override Task<int> HandleAsync(IRequestContext<TestRequestA> context, NextHandler next)
+        protected override Task<int> HandleAsync(IRequestContext<TestRequestA> context, NextAction next)
         {
             return next(context.WithRequest(context.Request with { A = context.Request.A + 20 }));
         }
@@ -42,7 +42,7 @@ public class ChainedRequestHandlerTest
 
     private class TestRequestHandler2 : ChainedRequestHandler<TestRequestA, int>
     {
-        protected override Task<int> HandleAsync(IRequestContext<TestRequestA> context, NextHandler next)
+        protected override Task<int> HandleAsync(IRequestContext<TestRequestA> context, NextAction next)
         {
             return next(context.WithRequest(context.Request with { A = context.Request.A + 2 }));
         }
