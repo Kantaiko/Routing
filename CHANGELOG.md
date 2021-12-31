@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.7.1"></a>
+## [0.7.1](https://www.github.com/Kantaiko/Routing/releases/tag/v0.7.1) (2021-12-31)
+
+### Bug Fixes
+
+* Change return types of handler factories ([6ce67d0](https://www.github.com/Kantaiko/Routing/commit/6ce67d0b0b78493901a0b83a8d61d3d039739d5f))
+* Improve NullCheckHandler to wrap chained handlers ([4e36475](https://www.github.com/Kantaiko/Routing/commit/4e36475ed0251b9678b8989b602e05b174dac5ee))
+
 <a name="0.7.0"></a>
 ## [0.7.0](https://www.github.com/Kantaiko/Routing/releases/tag/v0.7.0) (2021-12-31)
 
