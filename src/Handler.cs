@@ -59,7 +59,7 @@ public static class Handler
         return new RouterHandler<TInput, TOutput>(routes);
     }
 
-    public static IHandler<TInput, TOutput> Chain<TInput, TOutput>(
+    public static IChainedHandler<TInput, TOutput> Chain<TInput, TOutput>(
         IEnumerable<IHandler<TInput, TOutput>> handlers)
     {
         ArgumentNullException.ThrowIfNull(handlers);
@@ -67,7 +67,7 @@ public static class Handler
         return new ChainHandler<TInput, TOutput>(handlers);
     }
 
-    public static IHandler<TInput, TOutput> Transient<TInput, TOutput>(Type handlerType,
+    public static IChainedHandler<TInput, TOutput> Transient<TInput, TOutput>(Type handlerType,
         IHandlerFactory? handlerFactory = null)
     {
         ArgumentNullException.ThrowIfNull(handlerType);
@@ -75,7 +75,7 @@ public static class Handler
         return new TransientHandler<TInput, TOutput>(handlerType, handlerFactory);
     }
 
-    public static IReadOnlyList<IHandler<TInput, TOutput>> TransientRange<TInput, TOutput>(
+    public static IReadOnlyList<IChainedHandler<TInput, TOutput>> TransientRange<TInput, TOutput>(
         IEnumerable<Type> handlerTypes,
         IHandlerFactory? handlerFactory = null)
     {
@@ -84,7 +84,8 @@ public static class Handler
         return handlerTypes.Select(x => new TransientHandler<TInput, TOutput>(x, handlerFactory)).ToImmutableArray();
     }
 
-    public static IHandler<TInput, TOutput> Transient<TInput, TOutput, THandler>(IHandlerFactory? handlerFactory = null)
+    public static IChainedHandler<TInput, TOutput> Transient<TInput, TOutput, THandler>(
+        IHandlerFactory? handlerFactory = null)
         where THandler : IHandler<TInput, TOutput>
     {
         return new TransientHandler<TInput, TOutput>(typeof(THandler), handlerFactory);
@@ -143,7 +144,7 @@ public static class Handler
         return new SequentialAsyncHandler<TInput>(handlers);
     }
 
-    public static IHandler<TInput, Unit> Empty<TInput>() => EmptyHandler<TInput>.Instance;
+    public static IChainedHandler<TInput, Unit> Empty<TInput>() => EmptyHandler<TInput>.Instance;
 
-    public static IHandler<TInput, Task<Unit>> EmptyAsync<TInput>() => EmptyAsyncHandler<TInput>.Instance;
+    public static IChainedHandler<TInput, Task<Unit>> EmptyAsync<TInput>() => EmptyAsyncHandler<TInput>.Instance;
 }
