@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.7.0"></a>
+## [0.7.0](https://www.github.com/Kantaiko/Routing/releases/tag/v0.7.0) (2021-12-31)
+
+### Bug Fixes
+
+* Rename NextHandler to NextAction ([a6e7d15](https://www.github.com/Kantaiko/Routing/commit/a6e7d15adddb2a8bb7caa1894b246d3541bc7139))
+
+### Features
+
+* Allow nested chain handlers ([a3ef957](https://www.github.com/Kantaiko/Routing/commit/a3ef95761a2d434a7694fcf87cdc90d5b5978ad8))
+
 <a name="0.6.0"></a>
 ## [0.6.0](https://www.github.com/Kantaiko/Routing/releases/tag/v0.6.0) (2021-12-28)
 
