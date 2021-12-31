@@ -108,6 +108,14 @@ public static class Handler
         return new WrappedHandler<TInput, TOutput>(originalHandler, wrapperFunction);
     }
 
+    public static IChainedHandler<TInput, TOutput> CheckNull<TInput, TOutput>(
+        this IChainedHandler<TInput, TOutput> handler)
+    {
+        ArgumentNullException.ThrowIfNull(handler);
+
+        return new NullCheckHandler<TInput, TOutput>(handler);
+    }
+
     public static IHandler<TInput, TOutput> CheckNull<TInput, TOutput>(this IHandler<TInput, TOutput> handler)
     {
         ArgumentNullException.ThrowIfNull(handler);
