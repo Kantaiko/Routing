@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.7.2"></a>
+## [0.7.2](https://www.github.com/Kantaiko/Routing/releases/tag/v0.7.2) (2022-1-7)
+
+### Bug Fixes
+
+* Introduce IContextAccessor instead of ContextServiceProvider ([61a1c58](https://www.github.com/Kantaiko/Routing/commit/61a1c58defc038e6defc646082fb923fcc3fb690))
+
 <a name="0.7.1"></a>
 ## [0.7.1](https://www.github.com/Kantaiko/Routing/releases/tag/v0.7.1) (2021-12-31)
 
