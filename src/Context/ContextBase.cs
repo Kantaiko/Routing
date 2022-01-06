@@ -9,10 +9,15 @@ public class ContextBase : IContext
         IReadOnlyPropertyCollection? properties = null,
         CancellationToken cancellationToken = default)
     {
+        if (serviceProvider?.GetService(typeof(IContextAcceptor)) is IContextAcceptor contextAcceptor)
+        {
+            contextAcceptor.SetContext(this);
+        }
+
         serviceProvider ??= DefaultServiceProvider.Instance;
         properties ??= ImmutablePropertyCollection.Empty;
 
-        ServiceProvider = new ContextServiceProvider(this, serviceProvider);
+        ServiceProvider = serviceProvider;
         Properties = properties.ToImmutable();
         CancellationToken = cancellationToken;
     }

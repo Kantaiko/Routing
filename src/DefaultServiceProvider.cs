@@ -2,9 +2,9 @@ namespace Kantaiko.Routing;
 
 public class DefaultServiceProvider : IServiceProvider
 {
-    public object GetService(Type serviceType)
+    public object? GetService(Type serviceType)
     {
-        throw new InvalidOperationException("DI container is not configured");
+        return null;
     }
 
     private static DefaultServiceProvider? _instance;
