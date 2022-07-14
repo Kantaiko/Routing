@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.8.0"></a>
+## [0.8.0](https://www.github.com/Kantaiko/Routing/releases/tag/v0.8.0) (2022-7-14)
+
+### Features
+
+* Simplify routing infrastructure ([22cd5e0](https://www.github.com/Kantaiko/Routing/commit/22cd5e0115aa2c47a56b511ce75c8904c389789b))
+
 <a name="0.7.2"></a>
 ## [0.7.2](https://www.github.com/Kantaiko/Routing/releases/tag/v0.7.2) (2022-1-7)
 
