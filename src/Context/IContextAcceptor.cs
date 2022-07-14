@@ -2,5 +2,5 @@
 
 public interface IContextAcceptor
 {
-    void SetContext(IContext context);
+    void SetContext(object context);
 }

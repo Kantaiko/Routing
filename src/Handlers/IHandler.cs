@@ -1,4 +1,4 @@
-namespace Kantaiko.Routing;
+namespace Kantaiko.Routing.Handlers;
 
 public interface IHandler<in TInput, out TOutput>
 {

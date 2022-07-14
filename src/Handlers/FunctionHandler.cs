@@ -11,5 +11,8 @@ public class FunctionHandler<TInput, TOutput> : IHandler<TInput, TOutput>
         _functionDelegate = functionDelegate;
     }
 
-    public TOutput Handle(TInput input) => _functionDelegate(input);
+    public TOutput Handle(TInput input)
+    {
+        return _functionDelegate(input);
+    }
 }

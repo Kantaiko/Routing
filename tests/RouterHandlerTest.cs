@@ -1,3 +1,4 @@
+using Kantaiko.Routing.Handlers;
 using Xunit;
 
 namespace Kantaiko.Routing.Tests;
@@ -15,8 +16,18 @@ public class RouterHandlerTest
     {
         var routerHandler = Handler.Router(new Dictionary<Type, IHandler<IRequest, int>>
         {
-            [typeof(MultipleRequest)] = Handler.Function<MultipleRequest, IRequest, int>(input => input.A * input.B),
-            [typeof(SumRequest)] = Handler.Function<SumRequest, IRequest, int>(input => input.A + input.B)
+            [typeof(MultipleRequest)] = Handler.Function<IRequest, int>(input =>
+            {
+                var multipleRequest = (MultipleRequest) input;
+
+                return multipleRequest.A * multipleRequest.B;
+            }),
+            [typeof(SumRequest)] = Handler.Function<IRequest, int>(input =>
+            {
+                var sumRequest = (SumRequest) input;
+
+                return sumRequest.A + sumRequest.B;
+            })
         });
 
         Assert.Equal(24, routerHandler.Handle(new MultipleRequest(12, 2)));

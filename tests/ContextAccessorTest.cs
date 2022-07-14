@@ -14,8 +14,8 @@ public class ContextAccessorTest
 
         var contextAccessor = (IContextAccessor) createdContext.ServiceProvider.GetService(typeof(IContextAccessor))!;
 
-        var baseContextAccessor = (IContextAccessor<ContextBase>) createdContext.ServiceProvider
-            .GetService(typeof(IContextAccessor<ContextBase>))!;
+        var baseContextAccessor = (ContextAccessor<ContextBase>) createdContext.ServiceProvider
+            .GetService(typeof(ContextAccessor<ContextBase>))!;
 
         Assert.Same(createdContext, contextAccessor.Context);
         Assert.Same(createdContext, baseContextAccessor.Context);
@@ -27,10 +27,9 @@ public class ContextAccessorTest
 
         public object GetService(Type serviceType)
         {
-            if (serviceType.IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IContextAccessor<>))
+            if (serviceType.IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(ContextAccessor<>))
             {
-                var accessorType = typeof(ContextAccessor<>).MakeGenericType(serviceType.GetGenericArguments()[0]);
-                return Activator.CreateInstance(accessorType, _contextAccessor)!;
+                return Activator.CreateInstance(serviceType, _contextAccessor)!;
             }
 
             if (serviceType == typeof(IContextAcceptor) || serviceType == typeof(IContextAccessor))

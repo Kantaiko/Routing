@@ -1,10 +1,16 @@
-namespace Kantaiko.Routing.Handlers;
+﻿namespace Kantaiko.Routing.Handlers;
 
-public class EmptyAsyncHandler<TInput> : IChainedHandler<TInput, Task<Unit>>
+internal class EmptyAsyncHandler<TInput> : IHandler<TInput, Task>, IChainedHandler<TInput, Task>
 {
-    public Task<Unit> Handle(TInput input, Func<TInput, Task<Unit>> next) => Unit.Task;
-
-    public Task<Unit> Handle(TInput input) => Unit.Task;
-
     public static EmptyAsyncHandler<TInput> Instance { get; } = new();
+
+    public Task Handle(TInput input)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task Handle(TInput input, Func<TInput, Task> next)
+    {
+        return Task.CompletedTask;
+    }
 }

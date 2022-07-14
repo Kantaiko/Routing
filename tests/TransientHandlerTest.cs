@@ -1,4 +1,5 @@
 using Kantaiko.Routing.Abstractions;
+using Kantaiko.Routing.Handlers;
 using Xunit;
 
 namespace Kantaiko.Routing.Tests;
@@ -35,7 +36,7 @@ public class TransientHandlerTest
     {
         var handlerFactory = new TestHandlerFactory();
 
-        var transientHandler = Handler.Transient<Unit, int, TestHandler>(handlerFactory);
+        var transientHandler = new TransientHandler<Unit, int>(typeof(TestHandler), handlerFactory);
         var result = transientHandler.Handle(Unit.Value);
 
         Assert.Equal(42, result);

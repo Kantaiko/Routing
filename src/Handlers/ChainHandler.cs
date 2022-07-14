@@ -1,12 +1,10 @@
-using Kantaiko.Routing.Exceptions;
-
 namespace Kantaiko.Routing.Handlers;
 
 public class ChainHandler<TInput, TOutput> : IChainedHandler<TInput, TOutput>
 {
-    private readonly IEnumerable<IHandler<TInput, TOutput>> _chainedHandlers;
+    private readonly IEnumerable<IChainedHandler<TInput, TOutput>> _chainedHandlers;
 
-    public ChainHandler(IEnumerable<IHandler<TInput, TOutput>> chainedHandlers)
+    public ChainHandler(IEnumerable<IChainedHandler<TInput, TOutput>> chainedHandlers)
     {
         _chainedHandlers = chainedHandlers;
     }
@@ -23,9 +21,7 @@ public class ChainHandler<TInput, TOutput> : IChainedHandler<TInput, TOutput>
                 return next(mContext);
             }
 
-            var result = handlerEnumerator.Current is IChainedHandler<TInput, TOutput> chainedHandler
-                ? chainedHandler.Handle(mContext, MoveNext)
-                : handlerEnumerator.Current.Handle(mContext);
+            var result = handlerEnumerator.Current.Handle(mContext, MoveNext);
 
             if (result is Task task)
             {
@@ -40,15 +36,5 @@ public class ChainHandler<TInput, TOutput> : IChainedHandler<TInput, TOutput>
         }
 
         return MoveNext(input);
-    }
-
-    private static TOutput EndNext(TInput input)
-    {
-        throw new ChainEndedException();
-    }
-
-    public TOutput Handle(TInput input)
-    {
-        return Handle(input, EndNext);
     }
 }

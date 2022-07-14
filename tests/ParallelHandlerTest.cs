@@ -10,35 +10,6 @@ public class ParallelHandlerTest
     }
 
     [Fact]
-    public void ShouldRunHandlersParallel()
-    {
-        var handler = Handler.Parallel(new[]
-        {
-            Handler.Function<TestContext, Unit>(context =>
-            {
-                lock (context)
-                {
-                    context.Count++;
-                    return default;
-                }
-            }),
-            Handler.Function<TestContext, Unit>(context =>
-            {
-                lock (context)
-                {
-                    context.Count++;
-                    return default;
-                }
-            })
-        });
-
-        var context = new TestContext();
-        handler.Handle(context);
-
-        Assert.Equal(2, context.Count);
-    }
-
-    [Fact]
     public void ShouldRunAsyncHandlersParallel()
     {
         var handler = Handler.SequentialAsync(new[]

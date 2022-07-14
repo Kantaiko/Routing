@@ -1,3 +1,4 @@
+using Kantaiko.Routing.Handlers;
 using Xunit;
 
 namespace Kantaiko.Routing.Tests;
@@ -11,7 +12,7 @@ public class ChainHandlerTest
         {
             Handler.Function<int, int>((x, next) => next(x + 2)),
             Handler.Function<int, int>((x, next) => next(x * 2)),
-            Handler.Function<int, int>(x => x)
+            Handler.Function<int, int>((x, _) => x)
         });
 
         Assert.Equal(4, chainHandler.Handle(0));
@@ -25,7 +26,7 @@ public class ChainHandlerTest
         {
             Handler.Function<int, Task<int>>((x, next) => next(x + 2)),
             Handler.Function<int, Task<int>>((x, next) => next(x * 2)),
-            Handler.Function<int, Task<int>>(Task.FromResult)
+            Handler.Function<int, Task<int>>((x, _) => Task.FromResult(x))
         });
 
         Assert.Equal(4, await chainHandler.Handle(0));
@@ -44,7 +45,7 @@ public class ChainHandlerTest
         var chainHandler2 = Handler.Chain(new[]
         {
             Handler.Function<int, int>((x, next) => next(x + 3)),
-            Handler.Function<int, int>(x => x)
+            Handler.Function<int, int>((x, _) => x)
         });
 
         var chainHandler = Handler.Chain(new[] { chainHandler1, chainHandler2 });

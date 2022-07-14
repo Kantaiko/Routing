@@ -1,22 +1,22 @@
-using System.Reflection;
 using Kantaiko.Routing.AutoRegistration;
+using Kantaiko.Routing.Handlers;
 using Xunit;
 
 namespace Kantaiko.Routing.Tests;
 
 public class AutoRegistrationTest
 {
-    private abstract class TestChainHandler : IChainedHandler<int, int>, IAutoRegistrableHandler
+    public abstract class TestChainHandler : IChainedHandler<int, int>, IAutoRegistrableHandler
     {
         public abstract int Handle(int input, Func<int, int> next);
     }
 
-    private class AddOneHandler : TestChainHandler
+    public class AddOneHandler : TestChainHandler
     {
         public override int Handle(int input, Func<int, int> next) => next(input + 1);
     }
 
-    private class AddTwoHandler : TestChainHandler
+    public class AddTwoHandler : TestChainHandler
     {
         public override int Handle(int input, Func<int, int> next) => next(input + 2);
     }
@@ -24,12 +24,11 @@ public class AutoRegistrationTest
     [Fact]
     public void ShouldGetAssemblyTypes()
     {
-        var types = Assembly.GetExecutingAssembly().GetTypes();
-        var handlers = StaticHandlerFactory.CreateTransientHandlers<int, int>(types);
+        var types = typeof(AutoRegistrationTest).GetNestedTypes();
+        var handlers = HandlerFactory.CreateTransientChainedHandlers<int, int>(types);
 
-        var lastHandler = Handler.Function<int, int>(input => input);
-        var handler = Handler.Chain(handlers.Append(lastHandler));
+        var chainHandler = new ChainHandler<int, int>(handlers);
 
-        Assert.Equal(3, handler.Handle(0));
+        Assert.Equal(3, chainHandler.Handle(0, x => x));
     }
 }
