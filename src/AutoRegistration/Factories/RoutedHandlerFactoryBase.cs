@@ -19,8 +19,10 @@ internal abstract class RoutedHandlerFactoryBase<THandler, TContext>
 
     public THandler Create(IEnumerable<Type> lookupTypes, IHandlerFactory? handlerFactory)
     {
-        // All interesting types (events, contexts and handlers) are non-abstract classes
-        var typeCollection = lookupTypes
+        var typeCollection = lookupTypes as ICollection<Type> ?? lookupTypes.ToArray();
+
+        // List of types to look for events, event handlers and context implementations
+        var classTypes = typeCollection
             .Where(x => x.IsClass && !x.IsAbstract)
             .ToArray();
 
@@ -28,7 +30,7 @@ internal abstract class RoutedHandlerFactoryBase<THandler, TContext>
         {
             // For non-generic context type, we can directly create corresponding transient handlers
 
-            return CombineHandlers(CreateTransientHandlers(typeCollection, handlerFactory));
+            return CombineHandlers(CreateTransientHandlers(classTypes, handlerFactory));
         }
 
         // If context type is generic, we possibly need to create a router that can handle all types
@@ -43,56 +45,96 @@ internal abstract class RoutedHandlerFactoryBase<THandler, TContext>
         var eventBaseType = genericArguments[0];
 
         // Find all accessible event types inherited from event base type
-        var eventTypes = typeCollection.Where(x => x.IsAssignableTo(eventBaseType)).ToArray();
+        var eventTypes = classTypes.Where(x => x.IsAssignableTo(eventBaseType)).ToArray();
 
         if (eventTypes.Length == 0)
         {
             throw new InvalidOperationException("At least one event type must be specified in lookup types");
         }
 
-        if (eventTypes.Length == 1)
-        {
-            // If there is only one event type, we can also use all appropriate handlers directly
+        var contextGenericDefinition = typeof(TContext).GetGenericTypeDefinition();
 
-            return CombineHandlers(CreateTransientHandlers(typeCollection, handlerFactory));
+        // Find all accessible context types inherited from base context type
+        var eventContextTypes = typeCollection
+            .Where(x => x.IsAbstract || x.IsInterface)
+            .Where(x => IsAssignableToGenericType(x, contextGenericDefinition))
+            .Append(contextGenericDefinition)
+            .ToArray();
+
+        if (eventContextTypes.Length == 1 && eventTypes.Length == 1)
+        {
+            // If there is only one event type and one context type,
+            // we can also use all appropriate handlers directly
+
+            return CombineHandlers(CreateTransientHandlers(classTypes, handlerFactory));
         }
 
         // Otherwise, we need a router
 
-        var contextGenericDefinition = typeof(TContext).GetGenericTypeDefinition();
-
-        var contextImplementationTypes = typeCollection
-            .Where(x => x.IsGenericTypeDefinition && IsAssignableToGenericType(x, contextGenericDefinition))
-            .ToArray();
-
-        if (contextImplementationTypes.Length == 0)
-        {
-            throw new InvalidOperationException(
-                "At least one context implementation type must be specified in lookup types");
-        }
-
-        // We need to create a route for each event type and each context implementation type
-        var routesCapacity = eventTypes.Length * contextImplementationTypes.Length;
+        // We need to create a route for each event type
+        // and each context type (which can be implemented by multiple types)
+        var routesCapacity = eventTypes.Length * eventContextTypes.Length;
 
         var routes = new Dictionary<Type, THandler>(routesCapacity);
 
-        foreach (var eventType in eventTypes)
+        foreach (var eventContextType in eventContextTypes)
         {
-            var contextType = contextGenericDefinition.MakeGenericType(eventType);
+            var contextImplementationTypes = classTypes
+                .Where(x => x.IsGenericTypeDefinition && IsAssignableToGenericType(x, eventContextType))
+                .ToArray();
 
-            var handlers = CreatePolymorphicTransientHandlers(contextType, typeCollection, handlerFactory).ToArray();
-
-            foreach (var implementationType in contextImplementationTypes)
+            if (contextImplementationTypes.Length == 0)
             {
-                var keyType = implementationType.MakeGenericType(eventType);
+                throw new InvalidOperationException(
+                    $"At least one implementation of context type {eventContextType.Name} must " +
+                    "be specified in lookup types");
+            }
 
-                if (handlers.Length > 0)
+            foreach (var eventType in eventTypes)
+            {
+                Type contextType;
+
+                // It seems that the most simple and reliable way to check generic type constraints
+                // is to try to create a generic type and handle the exception
+
+                try
                 {
-                    routes[keyType] = CombineHandlers(handlers);
+                    contextType = eventContextType.MakeGenericType(eventType);
                 }
-                else
+                catch (ArgumentException)
                 {
-                    routes[keyType] = CreateEmptyHandler();
+                    continue;
+                }
+
+                var handlers = CreatePolymorphicTransientHandlers(
+                    contextType,
+                    classTypes,
+                    handlerFactory
+                ).ToArray();
+
+                foreach (var implementationType in contextImplementationTypes)
+                {
+                    Type keyType;
+
+                    // We also need to check the implementation constraints
+
+                    try
+                    {
+                        keyType = implementationType.MakeGenericType(eventType);
+                    }
+                    catch (ArgumentException)
+                    {
+                        continue;
+                    }
+
+                    if (handlers.Length > 0)
+                    {
+                        routes[keyType] = CombineHandlers(handlers);
+                    }
+                    else
+                    {
+                        routes[keyType] = CreateEmptyHandler();
+                    }
                 }
             }
         }
