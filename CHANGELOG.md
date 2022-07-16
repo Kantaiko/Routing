@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.9.2"></a>
+## [0.9.2](https://www.github.com/Kantaiko/Routing/releases/tag/v0.9.2) (2022-7-16)
+
+### Bug Fixes
+
+* Add ability to use child context types ([d4faa9d](https://www.github.com/Kantaiko/Routing/commit/d4faa9dd1c6d49c81710b634d51f225efd49ca41))
+
 <a name="0.9.1"></a>
 ## [0.9.1](https://www.github.com/Kantaiko/Routing/releases/tag/v0.9.1) (2022-7-16)
 
