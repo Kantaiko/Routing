@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.9.3"></a>
+## [0.9.3](https://www.github.com/Kantaiko/Routing/releases/tag/v0.9.3) (2022-7-16)
+
+### Bug Fixes
+
+* Prevent handler override with empty handler ([9b1c131](https://www.github.com/Kantaiko/Routing/commit/9b1c131947d5c6131d59da7ba140952a20a6ae20))
+
 <a name="0.9.2"></a>
 ## [0.9.2](https://www.github.com/Kantaiko/Routing/releases/tag/v0.9.2) (2022-7-16)
 
