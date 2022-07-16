@@ -8,6 +8,6 @@ public static class ChainedHandlerExtensions
     {
         ArgumentNullException.ThrowIfNull(chainedHandler);
 
-        return chainedHandler.Handle(input, _ => throw new NoHandlersLeftException());
+        return chainedHandler.Handle(input, () => throw new NoHandlersLeftException());
     }
 }

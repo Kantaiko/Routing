@@ -1,13 +1,10 @@
-using Kantaiko.Routing.Context;
+﻿using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Routing.Events;
 
-public class EventContext<TEvent> : AsyncContextBase, IEventContext<TEvent>
+public class EventContext<TEvent> : ContextBase, IEventContext<TEvent>
 {
-    public EventContext(TEvent @event,
-        IServiceProvider? serviceProvider = null,
-        CancellationToken cancellationToken = default
-    ) : base(serviceProvider, cancellationToken)
+    public EventContext(TEvent @event, IServiceProvider? serviceProvider = null) : base(serviceProvider)
     {
         Event = @event;
     }

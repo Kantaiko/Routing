@@ -2,7 +2,8 @@
 
 namespace Kantaiko.Routing.Handlers;
 
-public class PolymorphicTransientHandler<TTargetInput, TInput, TOutput> : IHandler<TInput, TOutput>
+public class PolymorphicTransientHandler<TTargetInput, TInput, TOutput> : IHandler<TInput, TOutput>,
+    IChainedHandler<TInput, TOutput>
     where TTargetInput : TInput
 {
     private readonly Type _type;
@@ -19,5 +20,12 @@ public class PolymorphicTransientHandler<TTargetInput, TInput, TOutput> : IHandl
         var handler = _handlerFactory.CreateHandler<TTargetInput, TOutput>(_type, _handlerFactory);
 
         return handler.Handle((TTargetInput?) input!);
+    }
+
+    public TOutput Handle(TInput input, Func<TOutput> next)
+    {
+        var handler = _handlerFactory.CreateChainedHandler<TTargetInput, TOutput>(_type, _handlerFactory);
+
+        return handler.Handle((TTargetInput?) input!, next);
     }
 }

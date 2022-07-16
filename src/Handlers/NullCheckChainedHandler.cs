@@ -9,7 +9,7 @@ public class NullCheckChainedHandler<TInput, TOutput> : IChainedHandler<TInput, 
         _handler = handler;
     }
 
-    public TOutput Handle(TInput input, Func<TInput, TOutput> next)
+    public TOutput Handle(TInput input, Func<TOutput> next)
     {
         ArgumentNullException.ThrowIfNull(input);
 

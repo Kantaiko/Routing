@@ -3,9 +3,10 @@ using Kantaiko.Routing.Handlers;
 
 namespace Kantaiko.Routing.Events;
 
-public abstract class EventHandlerBase<TEvent> : EventHandlerBase<TEvent, IEventContext<TEvent>> { }
+public abstract class ChainedEventHandlerBase<TEvent> : ChainedEventHandlerBase<TEvent, IEventContext<TEvent>> { }
 
-public abstract class EventHandlerBase<TEvent, TContext> : ContextHandlerBase<TContext>, IAutoRegistrableHandler
+public abstract class ChainedEventHandlerBase<TEvent, TContext> : ChainedContextHandlerBase<TContext>,
+    IAutoRegistrableHandler
     where TContext : IEventContext<TEvent>
 {
     protected TEvent Event => Context.Event;

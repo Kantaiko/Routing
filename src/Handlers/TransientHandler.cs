@@ -13,7 +13,7 @@ public class TransientHandler<TInput, TOutput> : IHandler<TInput, TOutput>, ICha
         _handlerFactory = handlerFactory ?? DefaultHandlerFactory.Instance;
     }
 
-    public TOutput Handle(TInput input, Func<TInput, TOutput> next)
+    public TOutput Handle(TInput input, Func<TOutput> next)
     {
         var handlerInstance = _handlerFactory.CreateChainedHandler<TInput, TOutput>(_type, input);
 

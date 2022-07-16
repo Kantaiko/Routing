@@ -1,8 +1,5 @@
-using Kantaiko.Routing.Context;
+﻿using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Routing.Events;
 
-public interface IEventContext<out TEvent> : IAsyncContext
-{
-    TEvent Event { get; }
-}
+public interface IEventContext<out TEvent> : IContext, IHasEvent<TEvent> { }

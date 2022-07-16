@@ -9,19 +9,19 @@ public class ChainHandler<TInput, TOutput> : IChainedHandler<TInput, TOutput>
         _chainedHandlers = chainedHandlers;
     }
 
-    public TOutput Handle(TInput input, Func<TInput, TOutput> next)
+    public TOutput Handle(TInput input, Func<TOutput> next)
     {
         var handlerEnumerator = _chainedHandlers.GetEnumerator();
 
-        TOutput MoveNext(TInput mContext)
+        TOutput MoveNext()
         {
             if (!handlerEnumerator.MoveNext())
             {
                 handlerEnumerator.Dispose();
-                return next(mContext);
+                return next();
             }
 
-            var result = handlerEnumerator.Current.Handle(mContext, MoveNext);
+            var result = handlerEnumerator.Current.Handle(input, MoveNext);
 
             if (result is Task task)
             {
@@ -35,6 +35,6 @@ public class ChainHandler<TInput, TOutput> : IChainedHandler<TInput, TOutput>
             return result;
         }
 
-        return MoveNext(input);
+        return MoveNext();
     }
 }

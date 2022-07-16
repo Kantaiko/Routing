@@ -28,14 +28,6 @@ public static class Handler
         return new FunctionChainedHandler<TInput, TOutput>(functionDelegate);
     }
 
-    public static IChainedHandler<TInput, TOutput> Chain<TInput, TOutput>(
-        IEnumerable<IChainedHandler<TInput, TOutput>> handlers)
-    {
-        ArgumentNullException.ThrowIfNull(handlers);
-
-        return new ChainHandler<TInput, TOutput>(handlers);
-    }
-
     public static IChainedHandler<TInput, TOutput> WithNullCheck<TInput, TOutput>(
         this IChainedHandler<TInput, TOutput> handler)
     {
@@ -65,8 +57,4 @@ public static class Handler
 
         return new SequentialAsyncHandler<TInput>(handlers);
     }
-
-    public static IHandler<TInput, Task> EmptyAsync<TInput>() => EmptyAsyncHandler<TInput>.Instance;
-
-    public static IChainedHandler<TInput, Task> EmptyChainedAsync<TInput>() => EmptyAsyncHandler<TInput>.Instance;
 }
