@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.9.0"></a>
+## [0.9.0](https://www.github.com/Kantaiko/Routing/releases/tag/v0.9.0) (2022-7-16)
+
+### Features
+
+* Add sync and chained event handlers ([8e0953d](https://www.github.com/Kantaiko/Routing/commit/8e0953d61219712580f52c1cd2121e7011df0986))
+
 <a name="0.8.0"></a>
 ## [0.8.0](https://www.github.com/Kantaiko/Routing/releases/tag/v0.8.0) (2022-7-14)
 
