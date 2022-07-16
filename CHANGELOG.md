@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.9.1"></a>
+## [0.9.1](https://www.github.com/Kantaiko/Routing/releases/tag/v0.9.1) (2022-7-16)
+
+### Bug Fixes
+
+* Add Handler.Chain method ([e6ea148](https://www.github.com/Kantaiko/Routing/commit/e6ea14811f6ae34ec8d428d6dd182dfec84cb838))
+
 <a name="0.9.0"></a>
 ## [0.9.0](https://www.github.com/Kantaiko/Routing/releases/tag/v0.9.0) (2022-7-16)
 
