@@ -131,7 +131,7 @@ internal abstract class RoutedHandlerFactoryBase<THandler, TContext>
                     {
                         routes[keyType] = CombineHandlers(handlers);
                     }
-                    else
+                    else if (!routes.ContainsKey(keyType))
                     {
                         routes[keyType] = CreateEmptyHandler();
                     }
