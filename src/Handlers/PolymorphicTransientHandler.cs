@@ -17,14 +17,14 @@ public class PolymorphicTransientHandler<TTargetInput, TInput, TOutput> : IHandl
 
     public TOutput Handle(TInput input)
     {
-        var handler = _handlerFactory.CreateHandler<TTargetInput, TOutput>(_type, _handlerFactory);
+        var handler = _handlerFactory.CreateHandler<TTargetInput, TOutput>(_type, input);
 
         return handler.Handle((TTargetInput?) input!);
     }
 
     public TOutput Handle(TInput input, Func<TOutput> next)
     {
-        var handler = _handlerFactory.CreateChainedHandler<TTargetInput, TOutput>(_type, _handlerFactory);
+        var handler = _handlerFactory.CreateChainedHandler<TTargetInput, TOutput>(_type, input);
 
         return handler.Handle((TTargetInput?) input!, next);
     }
