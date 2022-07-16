@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.9.4"></a>
+## [0.9.4](https://www.github.com/Kantaiko/Routing/releases/tag/v0.9.4) (2022-7-16)
+
+### Bug Fixes
+
+* Pass input object when creating handler by type ([b070d8f](https://www.github.com/Kantaiko/Routing/commit/b070d8f435826c379c4625af42b7df904a07c2ed))
+
 <a name="0.9.3"></a>
 ## [0.9.3](https://www.github.com/Kantaiko/Routing/releases/tag/v0.9.3) (2022-7-16)
 
